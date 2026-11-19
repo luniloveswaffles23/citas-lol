@@ -1,3 +1,4 @@
+
 import { useState } from 'react'
 import { personajes } from '../data/personajes'
 import { productos } from '../data/productos'
@@ -5,12 +6,14 @@ import PanelFiltros from '../components/PanelFiltros'
 import TarjetaPersonaje from '../components/TarjetaPersonaje'
 import TarjetaRegalo from '../components/TarjetaRegalo'
 import MatchDelDia from '../components/MatchDelDia'
+import FichaCampeon from '../components/FichaCampeon'
 
 function Inicio() {
   const [mostrarFiltros, setMostrarFiltros] = useState(true)
   const [busqueda, setBusqueda] = useState('')
   const [distancia, setDistancia] = useState(25)
   const [raza, setRaza] = useState('Todas')
+  const [seleccionado, setSeleccionado] = useState(null)
 
   // Cambia cada día según la fecha
   const matchDelDia = personajes[new Date().getDate() % personajes.length]
@@ -39,9 +42,12 @@ function Inicio() {
         {mostrarFiltros && (
           <div className="col-12 col-lg-3">
             <PanelFiltros
-              busqueda={busqueda} setBusqueda={setBusqueda}
-              distancia={distancia} setDistancia={setDistancia}
-              raza={raza} setRaza={setRaza}
+              busqueda={busqueda}
+              setBusqueda={setBusqueda}
+              distancia={distancia}
+              setDistancia={setDistancia}
+              raza={raza}
+              setRaza={setRaza}
             />
           </div>
         )}
@@ -52,21 +58,30 @@ function Inicio() {
           <MatchDelDia personaje={matchDelDia} />
 
           <h2 className="h4 mb-3">Campeones disponibles</h2>
+
           <div className="row g-3">
             {filtrados.map((p) => (
               <div className="col-12 col-sm-6 col-xl-4" key={p.id}>
-                <TarjetaPersonaje personaje={p} />
+                <TarjetaPersonaje
+                  personaje={p}
+                  onVer={setSeleccionado}
+                />
               </div>
             ))}
           </div>
+
           {filtrados.length === 0 && (
-            <p className="texto-suave">No hay campeones con esos filtros.</p>
+            <p className="texto-suave">
+              No hay campeones con esos filtros.
+            </p>
           )}
 
           <h2 className="h4 mt-5 mb-2">Regalos para la cita</h2>
+
           <p className="texto-suave">
             ¡Demuestra tu interés con uno de nuestros regalos exclusivos de la Grieta del Invocador y causa la mejor primera impresión!
           </p>
+
           <div className="row g-3">
             {productos.map((prod) => (
               <div className="col-12 col-sm-6 col-lg-4" key={prod.id}>
@@ -74,12 +89,21 @@ function Inicio() {
               </div>
             ))}
           </div>
+
           <p className="texto-suave mt-3 small">
             Estos objetos son sacados del videojuego League of Legends.
           </p>
         </div>
       </div>
+
+      {/* Ficha del campeón seleccionado */}
+      <FichaCampeon
+        personaje={seleccionado}
+        onCerrar={() => setSeleccionado(null)}
+      />
+
     </div>
   )
 }
+
 export default Inicio

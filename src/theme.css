@@ -1,5 +1,5 @@
 :root {
-  --bg: #1``2060E;      --panel: #1F0C18;   --line: #4A1B35;
+  --bg: #12060E;      --panel: #1F0C18;   --line: #4A1B35;
   --field: #6B3A55;   --text: #F5E6EE;    --muted: #D9C2CE;
   --accent: #FF5C93;  --on-accent: #12060E; --second: #B794F6;
 }
@@ -66,3 +66,12 @@ body { background: var(--bg); color: var(--text); }
 /* Match del día */
 .hero-match { background: var(--panel); border: 1px solid var(--line); border-radius: 24px; padding: 20px; }
 .btn-secundario { background: transparent; color: var(--text); border: 1px solid var(--field); border-radius: 999px; padding: 10px 24px; }
+
+/* Zona clicable de la tarjeta */
+.tarjeta-click { background: none; border: 0; padding: 0; color: inherit; text-align: left; width: 100%; display: block; cursor: pointer; }
+.tarjeta-click:hover .foto { box-shadow: 0 0 0 2px var(--accent); }
+.tarjeta-click:focus-visible { outline: 2px solid var(--second); outline-offset: 4px; border-radius: 12px; }
+
+/* Ficha ampliada */
+.modal-citas { background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 24px; }
+.instagram-box { display: flex; align-items: center; gap: 12px; background: var(--bg); border: 1px solid var(--line); border-radius: 16px; padding: 14px 18px; color: var(--accent); font-size: 1.5rem; font-weight: 700; word-break: break-all; }
