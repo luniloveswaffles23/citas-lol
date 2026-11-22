@@ -7,7 +7,12 @@ function MatchDelDia({ personaje }) {
     <section className="hero-match mb-5">
       <div className="row g-4 align-items-center">
         <div className="col-12 col-md-4">
-          <div className="foto" style={{ height: 240 }}>[FOTO]</div>
+          <div className="foto" style={{ height: 240 }}>
+            {personaje.imagen
+              ? <img src={personaje.imagen} alt={personaje.nombre} style={{ objectPosition: personaje.posicion || 'center top' }}
+              loading="lazy" />
+              : "[FOTO]"}
+          </div>
         </div>
         <div className="col-12 col-md-8">
           <p className="mb-0 fw-bold" style={{ color: 'var(--second)' }}>Match del día</p>

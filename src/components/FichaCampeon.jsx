@@ -16,7 +16,12 @@ function FichaCampeon({ personaje, onCerrar, onMeGusta }) {
       <Modal.Body className="pt-0 pb-4 px-4">
         <div className="row g-4 align-items-center">
           <div className="col-12 col-md-5">
-            <div className="foto" style={{ height: 340 }}>[FOTO]</div>
+            <div className="foto foto-campeon">
+              {personaje.imagen
+                ? <img src={personaje.imagen} alt={personaje.nombre} style={{ objectPosition: personaje.posicion || 'center top' }}
+                loading="lazy" />
+                : "[FOTO]"}
+            </div>
           </div>
 
           <div className="col-12 col-md-7">

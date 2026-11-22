@@ -6,7 +6,12 @@ function TarjetaPersonaje({ personaje, onVer, onMeGusta }) {
         onClick={() => onVer && onVer(personaje)}
         aria-label={`Ver perfil de ${personaje.nombre}`}
       >
-        <div className="foto">[FOTO]</div>
+        <div className="foto foto-campeon">
+          {personaje.imagen
+            ? <img src={personaje.imagen} alt={personaje.nombre} style={{ objectPosition: personaje.posicion || 'center top' }}
+            loading="lazy" />
+            : "[FOTO]"}
+        </div>
         <h3 className="h5 mt-3 mb-1">{personaje.nombre}</h3>
         <p className="texto-suave mb-1">{personaje.raza} · a {personaje.distancia_km} km</p>
         <p className="texto-suave">{personaje.descripcion}</p>
