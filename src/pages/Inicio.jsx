@@ -6,6 +6,7 @@ import TarjetaPersonaje from '../components/TarjetaPersonaje'
 import TarjetaRegalo from '../components/TarjetaRegalo'
 import MatchDelDia from '../components/MatchDelDia'
 import FichaCampeon from '../components/FichaCampeon'
+import FichaRegalo from '../components/FichaRegalo'
 
 function Inicio({ onAgregarCarrito }) {
   const [mostrarFiltros, setMostrarFiltros] = useState(true)
@@ -13,9 +14,11 @@ function Inicio({ onAgregarCarrito }) {
   const [distancia, setDistancia] = useState(25)
   const [raza, setRaza] = useState('Todas')
   const [seleccionado, setSeleccionado] = useState(null)
+  const [regaloSeleccionado, setRegaloSeleccionado] = useState(null)
+
   const handleAgregarRegalo = (producto) => {
-  if (onAgregarCarrito) onAgregarCarrito(producto)
-}
+    if (onAgregarCarrito) onAgregarCarrito(producto)
+  }
 
   // Cambia cada día según la fecha
   const matchDelDia = personajes[new Date().getDate() % personajes.length]
@@ -87,7 +90,11 @@ function Inicio({ onAgregarCarrito }) {
           <div className="row g-3">
             {productos.map((prod) => (
               <div className="col-12 col-sm-6 col-lg-4" key={prod.id}>
-                <TarjetaRegalo producto={prod} onAgregar={handleAgregarRegalo} />
+                <TarjetaRegalo
+                  producto={prod}
+                  onAgregar={handleAgregarRegalo}
+                  onVer={setRegaloSeleccionado}
+                />
               </div>
             ))}
           </div>
@@ -104,6 +111,12 @@ function Inicio({ onAgregarCarrito }) {
         onCerrar={() => setSeleccionado(null)}
       />
 
+      {/* Ficha del regalo seleccionado */}
+      <FichaRegalo
+        producto={regaloSeleccionado}
+        onCerrar={() => setRegaloSeleccionado(null)}
+        onAgregar={handleAgregarRegalo}
+      />
     </div>
   )
 }

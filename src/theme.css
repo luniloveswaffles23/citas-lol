@@ -119,3 +119,157 @@ body { background: var(--bg); color: var(--text); }
   padding: 6px 14px;
   font-size: 0.85rem;
 }
+
+/* Ficha del campeón (versión nueva) */
+.modal-citas { overflow: hidden; }
+
+.ficha { position: relative; display: grid; grid-template-columns: 1fr; }
+@media (min-width: 768px) {
+  .ficha { grid-template-columns: 5fr 7fr; min-height: 440px; }
+}
+
+.ficha-foto {
+  position: relative;
+  min-height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, var(--line), var(--bg));
+}
+.ficha-foto img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ficha-foto::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to top, var(--panel) 0%, transparent 40%);
+}
+@media (min-width: 768px) {
+  .ficha-foto::after {
+    background:
+      linear-gradient(to right, transparent 65%, var(--panel) 100%),
+      linear-gradient(to top, var(--panel) 0%, transparent 30%);
+  }
+}
+
+.ficha-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+  padding: 32px;
+  background: radial-gradient(circle at 100% 0%,
+    color-mix(in srgb, var(--ficha-color) 18%, transparent), transparent 55%);
+}
+
+.ficha-nombre {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.ficha-datos { display: flex; flex-wrap: wrap; gap: 8px; }
+.ficha-dato {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.ficha-dato.raza {
+  border-color: var(--ficha-color);
+  color: var(--ficha-color);
+  font-weight: 700;
+}
+
+.ficha-bio {
+  margin: 0;
+  padding-left: 14px;
+  border-left: 3px solid var(--ficha-color);
+  font-size: 1.1rem;
+  font-style: italic;
+}
+
+.ficha-ig {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 10px 10px 16px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+.ficha-ig-icono { flex-shrink: 0; color: var(--accent); }
+.ficha-ig-usuario { flex: 1; font-size: 1.15rem; font-weight: 700; word-break: break-all; }
+.ficha-ig .btn-secundario { flex-shrink: 0; padding: 6px 14px; font-size: 0.85rem; }
+
+.ficha-cerrar {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 3;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: rgba(18, 6, 14, 0.6);
+  color: var(--text);
+  cursor: pointer;
+}
+.ficha-cerrar:hover { border-color: var(--accent); color: var(--accent); }
+.ficha-cerrar:focus-visible { outline: 2px solid var(--second); outline-offset: 2px; }
+
+/* Ficha de regalo */
+.ficha-foto.regalo {
+  background: radial-gradient(circle at 50% 45%,
+    color-mix(in srgb, var(--ficha-color) 22%, var(--panel)), var(--bg));
+}
+.ficha-foto.regalo::after { display: none; }
+.ficha-foto.regalo img {
+  position: static;
+  width: 128px;
+  height: 128px;
+  object-fit: cover;
+  border-radius: 20px;
+  box-shadow: 0 0 0 2px var(--ficha-color),
+    0 0 40px color-mix(in srgb, var(--ficha-color) 45%, transparent);
+}
+
+.regalo-impresion { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.regalo-corazones { display: flex; gap: 4px; color: var(--accent); }
+.regalo-corazones .vacio { color: var(--field); }
+
+/* Selector de campeón en el carrito */
+.input-citas option {
+  background: var(--panel);
+  color: var(--text);
+}
+
+.carrito-destino {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+.carrito-destino img {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent);
+}

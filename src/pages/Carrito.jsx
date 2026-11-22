@@ -1,21 +1,41 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { personajes } from '../data/personajes'
 
 function Carrito({ carrito = [], onEliminar, onVaciar }) {
+  const [campeonId, setCampeonId] = useState('')
   const [invocador, setInvocador] = useState('')
+  const [errorCampeon, setErrorCampeon] = useState('')
   const [error, setError] = useState('')
   const [compraExitosa, setCompraExitosa] = useState(false)
 
   const totalOro = carrito.reduce((acc, item) => acc + item.precio_oro * item.cantidad, 0)
   const totalItems = carrito.reduce((acc, item) => acc + item.cantidad, 0)
 
+  const campeon = personajes.find((p) => String(p.id) === campeonId)
+  const fotoCampeon = campeon ? campeon.imagen || campeon.foto : null
+
   const handleConfirmar = (e) => {
     e.preventDefault()
+
+    let valido = true
+
+    if (!campeon) {
+      setErrorCampeon('Elige a qué campeón le vas a regalar.')
+      valido = false
+    } else {
+      setErrorCampeon('')
+    }
+
     if (!invocador.trim() || !invocador.includes('#')) {
       setError('Ingresa tu Riot ID válido con tag (ej: Faker#LAN)')
-      return
+      valido = false
+    } else {
+      setError('')
     }
-    setError('')
+
+    if (!valido) return
+
     setCompraExitosa(true)
     if (onVaciar) onVaciar()
   }
@@ -42,7 +62,8 @@ function Carrito({ carrito = [], onEliminar, onVaciar }) {
         <div className="tarjeta text-center p-5">
           <h3 className="mb-2" style={{ color: 'var(--accent)' }}>¡Regalos enviados con éxito!</h3>
           <p className="texto-suave mb-4">
-            Tus objetos fueron enviados a la cuenta <strong>{invocador}</strong>. ¡Suerte en tu cita en la Grieta!
+            Tus regalos para <strong>{campeon ? campeon.nombre : 'tu cita'}</strong> fueron enviados
+            con la cuenta <strong>{invocador}</strong>. ¡Suerte en tu cita en la Grieta!
           </p>
           <Link to="/" className="btn-accent text-decoration-none d-inline-block">
             Volver a Descubrir
@@ -99,16 +120,53 @@ function Carrito({ carrito = [], onEliminar, onVaciar }) {
                 <span className="texto-suave">Regalos</span>
                 <span>{totalItems}</span>
               </div>
+              {campeon && (
+                <div className="d-flex justify-content-between mb-2">
+                  <span className="texto-suave">Para</span>
+                  <span>{campeon.nombre}</span>
+                </div>
+              )}
               <hr className="carrito-linea" />
               <div className="d-flex justify-content-between align-items-center mb-4">
-                <span className="fs-5 fw-bold" style={{ color: 'var(--accent)' }}>Total</span>
-                <span className="fs-4 fw-bold" style={{ color: 'var(--accent)' }}>
+                <span className="fw-bold fs-5" style={{ color: 'var(--accent)' }}>Total</span>
+                <span className="fs-5 fw-bold" style={{ color: 'var(--accent)' }}>
                   {totalOro} de oro
                 </span>
               </div>
 
-              <form onSubmit={handleConfirmar}>
-                <label htmlFor="riotId" className="d-block fw-bold mb-2">
+              <form onSubmit={handleConfirmar} noValidate>
+                <label htmlFor="campeon" className="d-block fw-bold mb-2">
+                  ¿A qué campeón le regalas?
+                </label>
+                <select
+                  id="campeon"
+                  className="input-citas"
+                  value={campeonId}
+                  onChange={(e) => setCampeonId(e.target.value)}
+                >
+                  <option value="">Elige un campeón</option>
+                  {personajes.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.nombre} · {p.raza}
+                    </option>
+                  ))}
+                </select>
+                {errorCampeon && <p className="text-danger small mt-2 mb-0">{errorCampeon}</p>}
+
+                {campeon && (
+                  <div className="carrito-destino">
+                    {fotoCampeon && (
+                      <img
+                        src={fotoCampeon}
+                        alt={campeon.nombre}
+                        style={{ objectPosition: campeon.posicion_tarjeta || 'center 20%' }}
+                      />
+                    )}
+                    <span className="small texto-suave">{campeon.descripcion}</span>
+                  </div>
+                )}
+
+                <label htmlFor="riotId" className="d-block fw-bold mt-4 mb-2">
                   Tu Riot ID (Nombre#TAG)
                 </label>
                 <input
