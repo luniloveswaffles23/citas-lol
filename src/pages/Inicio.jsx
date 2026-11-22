@@ -1,4 +1,3 @@
-
 import { useState } from 'react'
 import { personajes } from '../data/personajes'
 import { productos } from '../data/productos'
@@ -8,12 +7,15 @@ import TarjetaRegalo from '../components/TarjetaRegalo'
 import MatchDelDia from '../components/MatchDelDia'
 import FichaCampeon from '../components/FichaCampeon'
 
-function Inicio() {
+function Inicio({ onAgregarCarrito }) {
   const [mostrarFiltros, setMostrarFiltros] = useState(true)
   const [busqueda, setBusqueda] = useState('')
   const [distancia, setDistancia] = useState(25)
   const [raza, setRaza] = useState('Todas')
   const [seleccionado, setSeleccionado] = useState(null)
+  const handleAgregarRegalo = (producto) => {
+  if (onAgregarCarrito) onAgregarCarrito(producto)
+}
 
   // Cambia cada día según la fecha
   const matchDelDia = personajes[new Date().getDate() % personajes.length]
@@ -85,7 +87,7 @@ function Inicio() {
           <div className="row g-3">
             {productos.map((prod) => (
               <div className="col-12 col-sm-6 col-lg-4" key={prod.id}>
-                <TarjetaRegalo producto={prod} />
+                <TarjetaRegalo producto={prod} onAgregar={handleAgregarRegalo} />
               </div>
             ))}
           </div>

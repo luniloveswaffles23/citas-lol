@@ -1,7 +1,8 @@
+
 import { Link } from 'react-router-dom'
 import { Navbar, Nav, Container } from 'react-bootstrap'
 
-function NavbarCitas() {
+function NavbarCitas({ totalItems = 0 }) {
   return (
     <Navbar className="navbar-citas" variant="dark" expand="lg">
       <Container>
@@ -10,7 +11,7 @@ function NavbarCitas() {
         <Navbar.Collapse id="menu-principal">
           <Nav className="ms-auto">
             <Nav.Link as={Link} to="/">Descubrir</Nav.Link>
-            <Nav.Link as={Link} to="/carrito">Mi carrito (0)</Nav.Link>
+            <Nav.Link as={Link} to="/carrito">Mi carrito ({totalItems})</Nav.Link>
             <Nav.Link as={Link} to="/login">Iniciar sesión</Nav.Link>
             <Nav.Link as={Link} to="/registro">Registrarse</Nav.Link>
           </Nav>
