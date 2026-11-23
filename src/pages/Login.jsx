@@ -30,7 +30,7 @@ function Login() {
       if (correo.toLowerCase() === 'admin@citas.lol') {
         navigate('/admin')
       } else {
-        navigate('/')
+        navigate('/main')
       }
     }
   }

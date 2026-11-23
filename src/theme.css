@@ -273,3 +273,52 @@ body { background: var(--bg); color: var(--text); }
   object-fit: cover;
   border: 2px solid var(--accent);
 }
+
+/* ===== Nueva Página de Inicio (citas.lol) ===== */
+.hero-inicio {
+  background: radial-gradient(
+      circle at 85% 15%,
+      color-mix(in srgb, var(--accent) 18%, transparent),
+      transparent 55%
+    ),
+    var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+}
+
+.texto-acento {
+  color: var(--accent);
+}
+
+.badge-inicio {
+  background: var(--bg);
+  color: var(--second);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.badge-compatibilidad {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.paso-numero {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 800;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

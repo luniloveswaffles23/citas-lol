@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import NavbarCitas from './components/NavbarCitas'
 import Inicio from './pages/Inicio'
+import Main from './pages/Main'
 import Login from './pages/Login'
 import Registro from './pages/Registro'
 import Carrito from './pages/Carrito'
@@ -36,7 +37,8 @@ function App() {
     <>
       <NavbarCitas totalItems={totalItems} />
       <Routes>
-        <Route path="/" element={<Inicio onAgregarCarrito={agregarAlCarrito} />} />
+        <Route path="/" element={<Inicio />} />
+        <Route path="/main" element={<Main onAgregarCarrito={agregarAlCarrito} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registro" element={<Registro />} />
         <Route
@@ -54,4 +56,5 @@ function App() {
     </>
   )
 }
+
 export default App
