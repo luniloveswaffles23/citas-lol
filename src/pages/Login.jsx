@@ -1,11 +1,16 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { iniciarSesion, leerError } from '../api'
+import { useAuth } from '../context/AuthContext'
 
 function Login() {
   const navigate = useNavigate()
+  const { iniciar } = useAuth()
   const [correo, setCorreo] = useState('')
   const [password, setPassword] = useState('')
   const [errores, setErrores] = useState({})
+  const [enviando, setEnviando] = useState(false)
+  const [errorGeneral, setErrorGeneral] = useState('')
 
   const validar = () => {
     const nuevosErrores = {}
@@ -23,15 +28,22 @@ function Login() {
     return Object.keys(nuevosErrores).length === 0
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (validar()) {
-      // Si es admin@citas.lol redirige al panel Admin, si no al Inicio
-      if (correo.toLowerCase() === 'admin@citas.lol') {
-        navigate('/admin')
-      } else {
-        navigate('/main')
-      }
+    setErrorGeneral('')
+    if (!validar() || enviando) return
+
+    setEnviando(true)
+    try {
+      // El backend comprueba correo y contraseña en Neon
+      const usuario = await iniciarSesion({ correo: correo.trim(), password })
+      iniciar(usuario)
+      // Si el usuario es administrador va al panel Admin, si no a Main
+      navigate(usuario.rol === 'ADMIN' ? '/admin' : '/main')
+    } catch (error) {
+      setErrorGeneral(leerError(error).mensaje)
+    } finally {
+      setEnviando(false)
     }
   }
 
@@ -40,6 +52,12 @@ function Login() {
       <div className="tarjeta p-4">
         <h1 className="h3 mb-1">Iniciar sesión</h1>
         <p className="texto-suave mb-4">Ingresa con tu cuenta de citas.lol</p>
+
+        {errorGeneral && (
+          <div className="alert alert-danger py-2 small fw-bold" role="alert">
+            {errorGeneral}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} noValidate>
           <div className="mb-3">
@@ -68,8 +86,8 @@ function Login() {
             {errores.password && <small className="text-danger d-block mt-1">{errores.password}</small>}
           </div>
 
-          <button type="submit" className="btn-accent w-100 mb-3">
-            Entrar
+          <button type="submit" className="btn-accent w-100 mb-3" disabled={enviando}>
+            {enviando ? 'Entrando…' : 'Entrar'}
           </button>
 
                     <p className="texto-suave text-center small mb-0">

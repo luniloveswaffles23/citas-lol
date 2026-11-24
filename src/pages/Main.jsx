@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { personajes } from '../data/personajes'
-import { productos } from '../data/productos'
+import { obtenerCampeones, obtenerProductos } from '../api'
+import { useDatos } from '../hooks/useDatos'
+import EstadoCarga from '../components/EstadoCarga'
 import PanelFiltros from '../components/PanelFiltros'
 import TarjetaPersonaje from '../components/TarjetaPersonaje'
 import TarjetaRegalo from '../components/TarjetaRegalo'
@@ -16,12 +17,19 @@ function Main({ onAgregarCarrito}) {
   const [seleccionado, setSeleccionado] = useState(null)
   const [regaloSeleccionado, setRegaloSeleccionado] = useState(null)
 
+  // Datos que vienen del backend
+  const campeonesApi = useDatos(obtenerCampeones)
+  const productosApi = useDatos(obtenerProductos)
+  const personajes = campeonesApi.datos
+  const productos = productosApi.datos
+
   const handleAgregarRegalo = (producto) => {
     if (onAgregarCarrito) onAgregarCarrito(producto)
   }
 
   // Cambia cada día según la fecha
-  const matchDelDia = personajes[new Date().getDate() % personajes.length]
+  const matchDelDia =
+    personajes.length > 0 ? personajes[new Date().getDate() % personajes.length] : null
 
   const filtrados = personajes.filter(
     (p) =>
@@ -60,9 +68,15 @@ function Main({ onAgregarCarrito}) {
         <div className={mostrarFiltros ? 'col-12 col-lg-9' : 'col-12'}>
           <h1 className="mb-4">Encuentra a tu dúo en la Grieta</h1>
 
-          <MatchDelDia personaje={matchDelDia} />
+          {matchDelDia && <MatchDelDia personaje={matchDelDia} />}
 
           <h2 className="h4 mb-3">Campeones disponibles</h2>
+
+          <EstadoCarga
+            cargando={campeonesApi.cargando}
+            error={campeonesApi.error}
+            texto="campeones"
+          />
 
           <div className="row g-3">
             {filtrados.map((p) => (
@@ -75,7 +89,7 @@ function Main({ onAgregarCarrito}) {
             ))}
           </div>
 
-          {filtrados.length === 0 && (
+          {!campeonesApi.cargando && !campeonesApi.error && filtrados.length === 0 && (
             <p className="texto-suave">
               No hay campeones con esos filtros.
             </p>
@@ -86,6 +100,12 @@ function Main({ onAgregarCarrito}) {
           <p className="texto-suave">
             ¡Demuestra tu interés con uno de nuestros regalos exclusivos de la Grieta del Invocador y causa la mejor primera impresión!
           </p>
+
+          <EstadoCarga
+            cargando={productosApi.cargando}
+            error={productosApi.error}
+            texto="regalos"
+          />
 
           <div className="row g-3">
             {productos.map((prod) => (

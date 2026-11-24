@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { registrarUsuario, leerError } from '../api'
 
 function Registro() {
   const navigate = useNavigate()
@@ -11,6 +12,8 @@ function Registro() {
   })
   const [errores, setErrores] = useState({})
   const [exito, setExito] = useState(false)
+  const [enviando, setEnviando] = useState(false)
+  const [errorGeneral, setErrorGeneral] = useState('')
 
   const validar = () => {
     const nuevosErrores = {}
@@ -37,11 +40,30 @@ function Registro() {
     return Object.keys(nuevosErrores).length === 0
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (validar()) {
+    setErrorGeneral('')
+    if (!validar() || enviando) return
+
+    setEnviando(true)
+    try {
+      // Se guarda en Neon a través del backend
+      await registrarUsuario({
+        nombre: form.nombre.trim(),
+        correo: form.correo.trim(),
+        password: form.password,
+      })
       setExito(true)
       setTimeout(() => navigate('/login'), 1500)
+    } catch (error) {
+      const { mensaje, campo } = leerError(error)
+      if (campo) {
+        setErrores({ [campo]: mensaje })
+      } else {
+        setErrorGeneral(mensaje)
+      }
+    } finally {
+      setEnviando(false)
     }
   }
 
@@ -54,6 +76,12 @@ function Registro() {
         {exito && (
           <div className="alert alert-success py-2 small fw-bold">
             ¡Cuenta creada con éxito! Redirigiendo al inicio de sesión...
+          </div>
+        )}
+
+        {errorGeneral && (
+          <div className="alert alert-danger py-2 small fw-bold" role="alert">
+            {errorGeneral}
           </div>
         )}
 
@@ -112,8 +140,8 @@ function Registro() {
             )}
           </div>
 
-          <button type="submit" className="btn-accent w-100 mb-3">
-            Registrarse
+          <button type="submit" className="btn-accent w-100 mb-3" disabled={enviando || exito}>
+            {enviando ? 'Creando cuenta…' : 'Registrarse'}
           </button>
 
           <p className="texto-suave text-center small mb-0">

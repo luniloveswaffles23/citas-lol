@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { personajes } from '../data/personajes'
+import { obtenerCampeones } from '../api'
+import { useDatos } from '../hooks/useDatos'
 
 function Carrito({ carrito = [], onEliminar, onVaciar }) {
+  const { datos: personajes, cargando: cargandoCampeones } = useDatos(obtenerCampeones)
   const [campeonId, setCampeonId] = useState('')
   const [invocador, setInvocador] = useState('')
   const [errorCampeon, setErrorCampeon] = useState('')
@@ -144,7 +146,9 @@ function Carrito({ carrito = [], onEliminar, onVaciar }) {
                   value={campeonId}
                   onChange={(e) => setCampeonId(e.target.value)}
                 >
-                  <option value="">Elige un campeón</option>
+                  <option value="">
+                    {cargandoCampeones ? 'Cargando campeones…' : 'Elige un campeón'}
+                  </option>
                   {personajes.map((p) => (
                     <option key={p.id} value={p.id}>
                       {p.nombre} · {p.raza}

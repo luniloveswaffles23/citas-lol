@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { useAuth } from './context/AuthContext'
 import NavbarCitas from './components/NavbarCitas'
 import Inicio from './pages/Inicio'
 import Main from './pages/Main'
@@ -9,6 +10,7 @@ import Carrito from './pages/Carrito'
 import Admin from './pages/Admin'
 
 function App() {
+  const { usuario } = useAuth()
   const [carrito, setCarrito] = useState([])
 
   const agregarAlCarrito = (producto) => {
@@ -51,7 +53,11 @@ function App() {
             />
           }
         />
-        <Route path="/admin" element={<Admin />} />
+        {/* Solo entra un usuario con rol ADMIN; si no, va al login */}
+        <Route
+          path="/admin"
+          element={usuario?.rol === 'ADMIN' ? <Admin /> : <Navigate to="/login" replace />}
+        />
       </Routes>
     </>
   )
